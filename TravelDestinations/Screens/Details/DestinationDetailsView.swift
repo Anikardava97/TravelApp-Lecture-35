@@ -10,57 +10,62 @@ import SwiftUI
 struct DestinationDetailsView: View {
     @EnvironmentObject var viewModel: MainScreenViewModel
     var destination: Destination
-    
+    @Binding var path: NavigationPath
     
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading) {
-                
-                headerText("Destination Details")
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        if let transport = destination.transport {
-                            NavigationLink(destination: TransportView(transport: transport), label: {
-                                SecondaryButton(icon: "bus.fill", text: "Transport")
-                            })
-                        }
-                        
-                        if let mustSee = destination.mustSee {
-                            NavigationLink(destination: MustSeeView(mustSee: mustSee), label: {
-                                SecondaryButton(icon: "map", text: "Must See")
-                            })
-                        }
-                        
-                        if let hotels = destination.hotels {
-                            NavigationLink(destination: HotelsView(hotels: hotels), label: {
-                                SecondaryButton(icon: "bed.double", text: "Hotels")
-                            })
-                        }
+        
+        VStack(alignment: .leading) {
+            
+            headerText("Destination Details")
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    
+                    NavigationLink(value: destination.hotels) {
+                        SecondaryButton(icon: "bed.double", text: "Hotels")
                     }
-                    .padding(.leading, 16)
-                    .padding(.vertical, 6)
+                    .navigationDestination(for: [Hotel].self) { hotel in
+                        HotelsView(hotels: hotel, path: $path)
+                    }
+                    
+                    NavigationLink(value: destination.mustSee) {
+                        SecondaryButton(icon: "map", text: "Must See")
+                    }
+                    .navigationDestination(for: [MustSee].self) { mustSee in
+                        MustSeeView(mustSee: mustSee, path: $path)
+                    }
+                    
+                    NavigationLink(value: destination.transport) {
+                        SecondaryButton(icon: "bus.fill", text: "Transport")
+                    }
+                    .navigationDestination(for: [Transport].self) { transport in
+                        TransportView(transport: transport, path: $path)
+                    }
                 }
                 
-                Image(destination.cityName ?? "")
-                    .resizable()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 200)
-                    .cornerRadius(12)
-                    .padding(.horizontal, 16)
-                
-                Text(destination.description ?? "")
-                    .font(.system(size: 16))
-                    .fontWeight(.regular)
-                    .foregroundStyle(.black.opacity(0.5))
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 16)
-                
-                Spacer()
             }
+            .padding(.leading, 16)
+            .padding(.vertical, 6)
         }
+        
+        Image(destination.cityName ?? "")
+            .resizable()
+            .frame(maxWidth: .infinity)
+            .frame(height: 200)
+            .cornerRadius(12)
+            .padding(.horizontal, 16)
+        
+        Text(destination.description ?? "")
+            .font(.system(size: 16))
+            .fontWeight(.regular)
+            .foregroundStyle(.black.opacity(0.5))
+            .padding(.vertical, 16)
+            .padding(.horizontal, 16)
+        
+        Spacer()
     }
+    
     
     // MARK: - Methods
     func headerText(_ text: String) -> some View {

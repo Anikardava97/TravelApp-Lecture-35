@@ -18,11 +18,11 @@ import SwiftUI
                 HStack(spacing: 8) {
                     Image(icon)
                         .resizable()
-                        .frame(width: 24, height: 24)
+                        .frame(width: 20, height: 20)
                     
-                    Text(text.uppercased())
+                    Text(text.capitalized)
                         .foregroundColor(.black)
-                        .font(.system(size: 16))
+                        .font(.system(size: 14))
                         .fontWeight(.bold)
                 }
                 .frame(maxWidth: .infinity)

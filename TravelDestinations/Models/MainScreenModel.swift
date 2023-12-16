@@ -8,11 +8,11 @@
 import SwiftUI
 
 
-struct DestinationsResponse: Decodable {
+struct DestinationsResponse: Decodable, Hashable {
     var destinations: [Destination]
 }
 
-struct Destination: Decodable {
+struct Destination: Decodable, Hashable {
     var id = UUID()
     let cityName: String?
     let mainImage: String?
@@ -29,33 +29,33 @@ struct Destination: Decodable {
     }
 }
 
-enum GeneralImage: String, Decodable {
+enum GeneralImage: String, Decodable, Hashable{
     case image1 = "image1"
     case image2 = "image2"
     case image3 = "image3"
 }
 
-struct Transport: Decodable {
+struct Transport: Decodable, Hashable {
     let image: String
     let name: String
     let description: String
     let price: String
 }
 
-struct MustSee: Decodable {
+struct MustSee: Decodable, Hashable {
     let image: String
     let name: String
     let description: String
 }
 
-struct Hotel: Decodable {
+struct Hotel: Decodable, Hashable {
     let image: String
     let name: String
     let description: String
     let price: String
 }
 
-struct Tips: Decodable {
+struct Tips: Decodable, Hashable {
     let tip: String
 }
 

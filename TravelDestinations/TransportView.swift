@@ -10,50 +10,52 @@ import SwiftUI
 struct TransportView: View {
     
     let transport: [Transport]?
+    @Binding var path: NavigationPath
     
     // MARK: - Body
     var body: some View {
         
-        NavigationStack {
+        VStack(alignment: .leading) {
             
-            VStack(alignment: .leading) {
-                
-                headerText("Transport")
-                
-                List {
-                    ForEach(transport ?? [], id: \.name) { transport in
-                        VStack(alignment: .leading, spacing: 0) {
-                            
-                            Text(transport.name)
-                                .font(.system(size: 20))
-                                .fontWeight(.regular)
-                                .foregroundStyle(.black)
-                                .padding(.vertical, 16)
-                            
-                            Image(transport.image)
-                                .resizable()
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 200)
-                                .cornerRadius(12)
-                            
-                            Text(transport.description)
-                                .font(.system(size: 16))
-                                .fontWeight(.regular)
-                                .foregroundStyle(.black.opacity(0.8))
-                                .padding(.vertical, 16)
-                            
-                            Text(transport.price)
-                                .font(.system(size: 20))
-                                .fontWeight(.bold)
-                                .foregroundStyle(.black)
-                        }
+            headerText("Transport")
+            
+            List {
+                ForEach(transport ?? [], id: \.name) { transport in
+                    VStack(alignment: .leading, spacing: 0) {
+                        
+                        Text(transport.name)
+                            .font(.system(size: 20))
+                            .fontWeight(.regular)
+                            .foregroundStyle(.black)
+                            .padding(.vertical, 16)
+                        
+                        Image(transport.image)
+                            .resizable()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 200)
+                            .cornerRadius(12)
+                        
+                        Text(transport.description)
+                            .font(.system(size: 16))
+                            .fontWeight(.regular)
+                            .foregroundStyle(.black.opacity(0.8))
+                            .padding(.vertical, 16)
+                        
+                        Text(transport.price)
+                            .font(.system(size: 20))
+                            .fontWeight(.bold)
+                            .foregroundStyle(.black)
                     }
                 }
-                .listStyle(.plain)
             }
+            .listStyle(.plain)
+            
+            PrimaryButton(action: {
+                path.removeLast(path.count)
+            }, icon: "home", text: "Go to Homepage")
         }
     }
-
+    
     // MARK: - Methods
     func headerText(_ text: String) -> some View {
         Text(text)

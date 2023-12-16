@@ -13,27 +13,24 @@ struct MainScreenView: View {
     @StateObject var viewModel = MainScreenViewModel()
     @State private var showingTipAlert = false
     @State private var selectedTip: String = ""
+    @State private var path = NavigationPath()
     
     // MARK: - Body
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack(alignment: .leading) {
-                
-               headerText("Popular Destinations")
+                headerText("Popular Destinations")
                 
                 List {
                     ForEach(viewModel.destinations, id: \.id) { destination in
                         
-                        NavigationLink(destination:
-                                        DestinationDetailsView(destination: destination)
-                                       ) {
-                            
+                        NavigationLink(value: destination) {
                             HStack(spacing: 16) {
                                 Image(viewModel.imageName(for: destination))
-                                        .resizable()
-                                        .frame(width: 140, height: 80)
-                                        .cornerRadius(12)
-                        
+                                    .resizable()
+                                    .frame(width: 140, height: 80)
+                                    .cornerRadius(12)
+                                
                                 VStack(alignment: .leading) {
                                     Text(viewModel.cityName(for: destination))
                                         .fontWeight(.bold)
@@ -42,13 +39,17 @@ struct MainScreenView: View {
                         }
                     }
                 }
+                
+                .navigationDestination(for: Destination.self) { destination in
+                    DestinationDetailsView(destination: destination, path: $path)
+                }
                 .listStyle(.plain)
                 
                 PrimaryButton(action: {
                     selectedTip = travelTips.randomElement() ?? "No travel tips available at the moment."
                     showingTipAlert.toggle()
                 }, icon: "Plane", text: "Travel Tips")
-                             
+                
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         Image("tripi")
